@@ -1,0 +1,9 @@
+[package]
+name = "knot-cli"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+knot-sdk = { git = "https://github.com/flipps12/rust-knot", branch = "master" }
+rustyline = "18.0.0"
+tokio = { version = "1.52.1", features = ["full"] }
