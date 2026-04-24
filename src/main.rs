@@ -48,13 +48,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         match readline {
             Ok(line) => {
                 let input = line.trim();
+                let mut input_splited = input.split_whitespace();
+                let command = input_splited.next().unwrap_or("");
+                let args: Vec<&str> = input_splited.collect();
 
                 if input.is_empty() {
                     continue;
                 }
 
-                match input {
+                match command {
                     "quit" | "exit" => break,
+                    "version" => knot.send_json(KnotCommand::Version).await.expect("Version command failed"),
                     "status" => knot.send_json(KnotCommand::Status).await.expect("Status command failed"),
                     "peerid" => knot.send_json(KnotCommand::GetPeerId).await.expect("Get PeerId failed"),
                     "protocol" => knot.send_json(KnotCommand::Protocol).await.expect("Protocol command failed"),
