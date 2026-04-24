@@ -93,7 +93,7 @@ dependencies = [
 [[package]]
 name = "knot-sdk"
 version = "0.1.0"
-source = "git+https://github.com/flipps12/rust-knot?branch=master#0233fdb39bae3044c6b4c136119aaf7628d9b2e9"
+source = "git+https://github.com/flipps12/rust-knot?branch=master#27c2c2624feecf61a64cb233a6d787c13114e929"
 dependencies = [
  "bs58",
  "serde",
