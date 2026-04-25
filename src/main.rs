@@ -4,7 +4,13 @@ use rustyline::DefaultEditor;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    println!("Knot-CLI v0.1.0");
+    let version = env!("CARGO_PKG_VERSION");
+    println!("version {}", version);
+
+    println!("██ ▄█▀ ▄▄  ▄▄  ▄▄▄ ▄▄▄▄▄▄    ▄█████ ██     ██");
+    println!("████   ███▄██ ██▀██  ██  ▄▄▄ ██     ██     ██");
+    println!("██ ▀█▄ ██ ▀██ ▀███▀  ██      ▀█████ ██████ ██ \n"); 
+                                              
 
     // connect
     let knot = match KnotClient::new(7564).await {
@@ -60,6 +66,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                 match command {
                     "quit" | "exit" => break,
+                    "help" => {
+                        println!("");
+                        println!("quit/exit - close CLI");
+                        println!("version - get package version from knotd");
+                        println!("status - test knotd status");
+                        println!("peerid - get peerid from this device");
+                        println!("protocol - get protocol version of socket (knotd)");
+                        println!("commands - get commands list from knotd");
+                        println!("connect [multiaddr] - try connect to multiaddr");
+                    },
                     "version" => { knot.send_json(KnotCommand::Version).await.expect("Version command failed"); },
                     "status" => { knot.send_json(KnotCommand::Status).await.expect("Status command failed"); },
                     "peerid" => { knot.send_json(KnotCommand::GetPeerId).await.expect("Get PeerId failed"); },
