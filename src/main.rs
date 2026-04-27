@@ -1,5 +1,5 @@
 use std::time::{ SystemTime, UNIX_EPOCH };
-
+use colored::*;
 use knot_sdk::{ KnotClient, KnotCommand };
 use rustyline::error::ReadlineError;
 use rustyline::DefaultEditor;
@@ -30,7 +30,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 Ok(msg) => {
                     if msg.response != Some("".into()) {
                         if let Some(response) = msg.response {
-                            println!("{}", response);
+                            println!("\r{}", response);
+                            //print!("{}", "> ".bold());
                         }
                     } else {
                         eprintln!("Error response: {:?}", msg.error);
@@ -71,6 +72,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let _ = knot.send_json(KnotCommand::Register { app_id: 1, port: 7564 }).await;
 
     let mut rl = DefaultEditor::new()?;
+    // for spacing
+    let width = 20;
 
     loop {
         let readline = rl.readline("> ");
@@ -93,16 +96,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         break;
                     }
                     "help" => {
-                        println!("");
-                        println!("quit/exit - close CLI");
-                        println!("version - get package version from knotd");
-                        println!("status - test knotd status");
-                        println!("peerid - get peerid from this device");
-                        println!("protocol - get protocol version of socket (knotd)");
-                        println!("commands - get commands list from knotd");
-                        println!("connect [multiaddr] - try connect to multiaddr");
-                    }
-                    "version" => {
+                        println!("{} {} {}", ">".bold(), "command".bold().blue(), "[arg1] [arg2]".red().bold());
+                        println!("  {:<width$} - close CLI", "quit/exit".green().bold(), width = width);
+                        println!("  {:<width$} - test time of frame sender/receiver", "ping [peerid]".green().bold(), width = width);
+                        println!("  {:<width$} - get package version from knotd", "version".green().bold(), width = width);
+                        println!("  {:<width$} - test knotd status", "status".green().bold(), width = width);
+                    println!("  {:<width$} - get peerid from this device", "peerid".green().bold(), width = width);
+                    println!("  {:<width$} - get protocol version of socket (knotd)", "protocol".green().bold(), width = width);
+                    println!("  {:<width$} - get commands list from knotd", "commands".green().bold(), width = width);
+                    println!("  {:<width$} - try connect to multiaddr", "connect [multiaddr]".green().bold(), width = width);
+                }
+                "version" => {
                         knot.send_json(KnotCommand::Version).await.expect("Version command failed");
                     }
                     "status" => {

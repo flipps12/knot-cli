@@ -5,6 +5,8 @@ edition = "2024"
 license = "Apache-2.0"
 
 [dependencies]
+colored = "3.1.1"
+colored_json = "5.0.0"
 knot-sdk = { git = "https://github.com/flipps12/rust-knot", branch = "master" }
 rustyline = "18.0.0"
 tokio = { version = "1.52.1", features = ["full"] }
