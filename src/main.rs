@@ -96,21 +96,71 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         break;
                     }
                     "help" => {
-                        println!("{} {} {}", ">".bold(), "command".bold().blue(), "[arg1] [arg2]".red().bold());
-                        println!("  {:<width$} - close CLI", "quit/exit".green().bold(), width = width);
-                        println!("  {:<width$} - test time of frame sender/receiver", "ping [peerid]".green().bold(), width = width);
-                        println!("  {:<width$} - get package version from knotd", "version".green().bold(), width = width);
-                        println!("  {:<width$} - test knotd status", "status".green().bold(), width = width);
-                    println!("  {:<width$} - get peerid from this device", "peerid".green().bold(), width = width);
-                    println!("  {:<width$} - get protocol version of socket (knotd)", "protocol".green().bold(), width = width);
-                    println!("  {:<width$} - get commands list from knotd", "commands".green().bold(), width = width);
-                    println!("  {:<width$} - try connect to multiaddr", "connect [multiaddr]".green().bold(), width = width);
-                }
-                "version" => {
+                        println!(
+                            "{} {} {}",
+                            ">".bold(),
+                            "command".bold().blue(),
+                            "[arg1] [arg2]".red().bold()
+                        );
+                        println!(
+                            "  {:<width$} - close CLI",
+                            "quit/exit".green().bold(),
+                            width = width
+                        );
+                        println!(
+                            "  {:<width$} - test time of frame sender/receiver",
+                            "ping [peerid]".green().bold(),
+                            width = width
+                        );
+                        println!(
+                            "  {:<width$} - get package version from knotd",
+                            "version".green().bold(),
+                            width = width
+                        );
+                        println!(
+                            "  {:<width$} - test knotd status",
+                            "status".green().bold(),
+                            width = width
+                        );
+                        println!(
+                            "  {:<width$} - get peerid from this device",
+                            "peerid".green().bold(),
+                            width = width
+                        );
+                        println!(
+                            "  {:<width$} - get protocol version of socket (knotd)",
+                            "protocol".green().bold(),
+                            width = width
+                        );
+                        println!(
+                            "  {:<width$} - get commands list from knotd",
+                            "commands".green().bold(),
+                            width = width
+                        );
+                        println!(
+                            "  {:<width$} - try connect to multiaddr",
+                            "connect [multiaddr]".green().bold(),
+                            width = width
+                        );
+                        println!(
+                            "  {:<width$} - listen on relay server",
+                            "relay [multiaddr(without peerid)] [peerid]".green().bold(),
+                            width = width
+                        );
+                        println!(
+                            "  {:<width$} - get listeners from knotd",
+                            "listeners".green().bold(),
+                            width = width
+                        );
+                    }
+                    "version" => {
                         knot.send_json(KnotCommand::Version).await.expect("Version command failed");
                     }
                     "status" => {
                         knot.send_json(KnotCommand::Status).await.expect("Status command failed");
+                    }
+                    "listeners" => {
+                        knot.send_json(KnotCommand::Listeners).await.expect("Listeners command failed");
                     }
                     "peerid" => {
                         knot.send_json(KnotCommand::GetPeerId).await.expect("Get PeerId failed");
