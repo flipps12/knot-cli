@@ -130,6 +130,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             multiaddr: args[0].to_string(),
                         }).await.expect("Connect command failed");
                     }
+                    "relay" => {
+                        knot.send_json(KnotCommand::ConnectRelay {
+                            relay_addr: args[0].to_string(),
+                            relay_id: args[1].to_string(),
+                        }).await.expect("Connect command failed");
+                    }
                     "ping" => {
                         let now = SystemTime::now();
                         let duration = now.duration_since(UNIX_EPOCH).unwrap();
