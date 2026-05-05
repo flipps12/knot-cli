@@ -1,8 +1,8 @@
-use std::time::{ SystemTime, UNIX_EPOCH };
 use colored::*;
-use knot_sdk::{ KnotClient, KnotCommand };
-use rustyline::error::ReadlineError;
+use knot_sdk::{KnotClient, KnotCommand};
 use rustyline::DefaultEditor;
+use rustyline::error::ReadlineError;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -69,7 +69,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     });
 
-    let _ = knot.send_json(KnotCommand::Register { app_id: 1, port: 7564 }).await;
+    let _ = knot
+        .send_json(KnotCommand::Register {
+            app_id: 1,
+            port: 7564,
+        })
+        .await;
 
     let mut rl = DefaultEditor::new()?;
     // for spacing
@@ -128,6 +133,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             width = width
                         );
                         println!(
+                            "  {:<width$} - get peers connected with this device",
+                            "peers".green().bold(),
+                            width = width
+                        );
+                        println!(
                             "  {:<width$} - get protocol version of socket (knotd)",
                             "protocol".green().bold(),
                             width = width
@@ -154,37 +164,54 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         );
                     }
                     "version" => {
-                        knot.send_json(KnotCommand::Version).await.expect("Version command failed");
+                        knot.send_json(KnotCommand::Version)
+                            .await
+                            .expect("Version command failed");
                     }
                     "status" => {
-                        knot.send_json(KnotCommand::Status).await.expect("Status command failed");
+                        knot.send_json(KnotCommand::Status)
+                            .await
+                            .expect("Status command failed");
                     }
                     "listeners" => {
-                        knot.send_json(KnotCommand::Listeners).await.expect("Listeners command failed");
+                        knot.send_json(KnotCommand::Listeners)
+                            .await
+                            .expect("Listeners command failed");
                     }
                     "peerid" => {
-                        knot.send_json(KnotCommand::GetPeerId).await.expect("Get PeerId failed");
+                        knot.send_json(KnotCommand::GetPeerId)
+                            .await
+                            .expect("Get PeerId failed");
+                    }
+                    "peers" => {
+                        knot.send_json(KnotCommand::GetPeers)
+                            .await
+                            .expect("Get PeerId failed");
                     }
                     "protocol" => {
-                        knot.send_json(KnotCommand::Protocol).await.expect(
-                            "Protocol command failed"
-                        );
+                        knot.send_json(KnotCommand::Protocol)
+                            .await
+                            .expect("Protocol command failed");
                     }
                     "commands" => {
-                        knot.send_json(KnotCommand::GetCommands).await.expect(
-                            "getCommands command failed"
-                        );
+                        knot.send_json(KnotCommand::GetCommands)
+                            .await
+                            .expect("getCommands command failed");
                     }
                     "connect" => {
                         knot.send_json(KnotCommand::Connect {
                             multiaddr: args[0].to_string(),
-                        }).await.expect("Connect command failed");
+                        })
+                        .await
+                        .expect("Connect command failed");
                     }
                     "relay" => {
                         knot.send_json(KnotCommand::ConnectRelay {
                             relay_addr: args[0].to_string(),
                             relay_id: args[1].to_string(),
-                        }).await.expect("Connect command failed");
+                        })
+                        .await
+                        .expect("Connect command failed");
                     }
                     "ping" => {
                         let now = SystemTime::now();
@@ -211,7 +238,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 pub mod timing {
-    use std::time::{ SystemTime, UNIX_EPOCH, Duration };
+    use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
     /// Convierte texto (u64) → Duration desde UNIX_EPOCH
     pub fn parse_timestamp(text: &str) -> Result<Duration, String> {
